@@ -2,12 +2,11 @@ package pt.ipbeja.app.tictactoe;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-import javax.lang.model.util.ElementScanner6;
 import java.nio.file.Paths;
 
 public class TicTacToeBoard extends GridPane {
@@ -28,9 +27,9 @@ public class TicTacToeBoard extends GridPane {
     /* Image Empty */
     static String urlEmpy = Paths.get("/Users/neyvaldo/IdeaProjects/GameOldTicTacToe/src/main/resources/src/noplayer.png").toUri().toString();
     static Image imageEmpty = new Image(urlEmpy);
-    //static ImageView viewEmpty= new ImageView(imageEmpty);
 
 
+    static int count = 0;
 
     public TicTacToeBoard()  // Constructor
     {
@@ -49,42 +48,49 @@ public class TicTacToeBoard extends GridPane {
             {
                 TicTacToeButton ticTacToeButton = new TicTacToeButton();
                 ticTacToeButton.setPrefSize(200,200); // Size of button
-                //btt.setGraphic(view);
                 ticTacToeButton.setOnAction(bHandler);
                 ImageView viewEmpty= new ImageView(imageEmpty);
                 ticTacToeButton.setGraphic(viewEmpty);
-
                 //this.add(ticTacToeButton, col, line); // Add button in grade
             }
         }
-
     }
-
     /*
-    * Button que despara ação quando é clicado
+    * Button que, despara ação quando é clicado
     * */
      static class ButtonHandler implements EventHandler<ActionEvent> {
 
-         @Override
+        @Override
          public void handle(ActionEvent actionEvent)
          {
              TicTacToeButton getButtonClick = (TicTacToeButton) (actionEvent.getSource());
+             count++;
              //String buttonClick = getButtonClick.getText();
 
+            if( !getButtonClick.isCancelButton())
+            {
+                if (isTurnX)
+                {
+                    ImageView viewX = new ImageView(imageX);
+                    getButtonClick.setGraphic(viewX);
 
-             if( getButtonClick.getGraphic() == null) {
-                 if (isTurnX) {
-                      ImageView viewX = new ImageView(imageX);
-                      getButtonClick.setGraphic(viewX);
+                } else
+                {
 
-                 } else {
+                    ImageView viewO = new ImageView(imageO);
+                    getButtonClick.setGraphic(viewO);
+                }
 
-                     ImageView viewO = new ImageView(imageO);
-                     getButtonClick.setGraphic(viewO);
-                 }
-                 
-                 isTurnX = !isTurnX;
-             }
+                isTurnX = !isTurnX;
+                getButtonClick.setDisable(true); // Desativa o botão quando ele é clicado
+
+            }
+            if(count == 9) // Verifica se todos os botoes foram clicados
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Over Game");
+                alert.showAndWait();// Alerta a informar o termino do jogo
+            }
+
          }
      }
 }
