@@ -51,7 +51,10 @@ public class TicTacToeBoard extends GridPane {
                 ticTacToeButton.setPrefSize(200,200); // Size of button
                 //btt.setGraphic(view);
                 ticTacToeButton.setOnAction(bHandler);
-                this.add(ticTacToeButton, col, line); // Add button in grade
+                ImageView viewEmpty= new ImageView(imageEmpty);
+                ticTacToeButton.setGraphic(viewEmpty);
+
+                //this.add(ticTacToeButton, col, line); // Add button in grade
             }
         }
 
