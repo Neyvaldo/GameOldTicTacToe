@@ -1,8 +1,11 @@
 package pt.ipbeja.app.tictactoe;
 
+import javafx.css.Size;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -12,7 +15,7 @@ import java.nio.file.Paths;
 public class TicTacToeBoard extends GridPane {
 
 
-     public final int SIZE = 3;     // Size fix grade 3x3
+     public static final int SIZE = 3;     // Size fix grade 3x3
 
     static boolean isTurnX = true;
 
@@ -41,6 +44,7 @@ public class TicTacToeBoard extends GridPane {
     * */
     private void createBoard ()
     {
+        getChildren().clear();
         ButtonHandler bHandler = new ButtonHandler();
         for (int line = 0; line < SIZE ; line++)
         {
@@ -51,14 +55,31 @@ public class TicTacToeBoard extends GridPane {
                 ticTacToeButton.setOnAction(bHandler);
                 ImageView viewEmpty= new ImageView(imageEmpty);
                 ticTacToeButton.setGraphic(viewEmpty);
-                //this.add(ticTacToeButton, col, line); // Add button in grade
+                this.add(ticTacToeButton, col, line); // Add button in grade
             }
+        }
+    }
+    /**
+     * Faz o Reset o tabuleiro do jogo Tic-Tac-Toe para seu estado inicial.
+     * Reativa todos os botões, redefine as suas imagens para Empty,
+     * zera o contador de cliques e restaura o turno inicial.
+     */
+    public void resetGame()
+    {
+        count = 0;
+        for (Node child : getChildren()) {
+            Button btn = (Button) child;
+            ImageView imageView = (ImageView) btn.getGraphic();
+
+            imageView.setImage(imageEmpty);
+            btn.setDisable(false);
+
         }
     }
     /*
     * Button que, despara ação quando é clicado
     * */
-     static class ButtonHandler implements EventHandler<ActionEvent> {
+      class ButtonHandler implements EventHandler<ActionEvent> {
 
         @Override
          public void handle(ActionEvent actionEvent)
@@ -66,29 +87,28 @@ public class TicTacToeBoard extends GridPane {
              TicTacToeButton getButtonClick = (TicTacToeButton) (actionEvent.getSource());
              count++;
              //String buttonClick = getButtonClick.getText();
+             ImageView imageView = (ImageView) getButtonClick.getGraphic();
+             if( !getButtonClick.isCancelButton()) {
+                if (isTurnX) {
+                    //ImageView viewX = new ImageView(imageX);
+                    //getButtonClick.setGraphic(viewX);
+                    imageView.setImage(imageX);
 
-            if( !getButtonClick.isCancelButton())
-            {
-                if (isTurnX)
-                {
-                    ImageView viewX = new ImageView(imageX);
-                    getButtonClick.setGraphic(viewX);
-
-                } else
-                {
-
-                    ImageView viewO = new ImageView(imageO);
-                    getButtonClick.setGraphic(viewO);
+                } else {
+                    //ImageView viewO = new ImageView(imageO);
+                    //getButtonClick.setGraphic(viewO);
+                    imageView.setImage(imageO);
                 }
-
                 isTurnX = !isTurnX;
                 getButtonClick.setDisable(true); // Desativa o botão quando ele é clicado
-
             }
-            if(count == 9) // Verifica se todos os botoes foram clicados
+
+            if(count == (SIZE * SIZE)) // Verifica se todos os botoes foram clicados
             {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Over Game");
                 alert.showAndWait();// Alerta a informar o termino do jogo
+
+                resetGame();
             }
 
          }
