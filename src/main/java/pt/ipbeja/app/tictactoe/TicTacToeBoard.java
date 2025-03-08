@@ -41,8 +41,13 @@ public class TicTacToeBoard extends GridPane {
 
     /**
      * Faz o Reset o tabuleiro do jogo Tic-Tac-Toe para seu estado inicial.
+<<<<<<< HEAD
      * Limpa os child de GridPane, redefine o contador para 0
      *  restaura o turno para `X` e recria o tabuleiro.
+=======
+     * Reativa todos os botões, redefine as imagens para Empty,
+     * zera o contador de cliques e restaura o turno inicial.
+>>>>>>> 03a786f839503508b1c4e9d79749570226020a75
      */
     public void resetGame() {
         getChildren().clear();
